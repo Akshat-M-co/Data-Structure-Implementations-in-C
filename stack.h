@@ -38,7 +38,7 @@ static inline void print_val_float(const void *p) { printf("%f\n", *(const float
 static inline void print_val_char(const void *p)  { printf("%c\n", *(const char*)p); }
 static inline void print_val_bool(const void *p)  { printf("%d\n", *(const bool*)p); }
 static inline void print_val_unsupported(const void *p) {
-    (void)p; /* deliberately unused — we don't know how to interpret it */
+    (void)p; 
     printf("This type cannot yet be formatted.\n");
 }
 #endif
