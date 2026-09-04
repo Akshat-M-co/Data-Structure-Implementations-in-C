@@ -19,7 +19,6 @@
 #define QUEUE_DEST CAT(destroyQueue_, SUFFIX)
 #define QUEUE_TOP_PRINT CAT(queueTopPrint_, SUFFIX)
 #define QUEUE_FULL_PRINT CAT(printFullQueue_, SUFFIX)
-#define QUEUE_SIZE CAT(queueSize_, SUFFIX)
 
 #define QUEUE_TYPE CAT(Queue_, SUFFIX)
 #define QUEUE_MANAGE CAT(QUEUE_TYPE, _manager)
@@ -55,13 +54,11 @@ static inline void print_val_unsupported(const void *p) {
 typedef struct CAT(queue_node, SUFFIX) {
         T* data;
         struct CAT(queue_node, SUFFIX)* next;
-        int number;
 } QUEUE_TYPE;
 
 typedef struct {
         QUEUE_TYPE* head;
         QUEUE_TYPE* tail;
-	int elementsRemoved;
 } QUEUE_MANAGE;
 
 static inline QUEUE_MANAGE *QUEUE_INIT(void){
@@ -69,7 +66,6 @@ static inline QUEUE_MANAGE *QUEUE_INIT(void){
 	if (newQueue == NULL) return NULL;
 	newQueue->head = NULL;
 	newQueue->tail = NULL;
-	newQueue->elementsRemoved = 0;
 	return newQueue;
 }
 
@@ -86,10 +82,8 @@ static inline int QUEUE_ADD(QUEUE_MANAGE *Queue, T* newData) {
 	if (Queue->head == NULL) {
 		Queue->head = newFrame;
 		Queue->tail = newFrame;
-		newFrame->number = 1;
 	} else {
 		Queue->tail->next = newFrame;
-		newFrame->number = Queue->tail->number + 1;
 		Queue->tail = newFrame;
 	}
 	return 1;
@@ -103,7 +97,6 @@ static inline int QUEUE_RM(QUEUE_MANAGE *Queue){
 	free(Queue->head);
 	Queue->head = nFrame;
 	if (nFrame == NULL) Queue->tail = NULL;
-	Queue->elementsRemoved++;
 	return 1;
 }
 
@@ -140,18 +133,18 @@ static inline void QUEUE_FULL_PRINT(QUEUE_MANAGE *Queue){
 		return;
 	}
 	QUEUE_TYPE *cur = Queue->head;
+	int walker = 1;
 	do {
-		printf("Queue Value Number: %d\n", cur->number - Queue->elementsRemoved);
+		printf("Queue Value Number: %d\n", walker);
 		printf("Queue Value Data: ");
 		print_val(*cur->data);
 		cur = cur->next;
+		walker++;
 	} while(cur != NULL);
 	return;
 }
 
-static inline int QUEUE_SIZE(QUEUE_MANAGE *Queue){
-	return Queue->tail->number - Queue->elementsRemoved;
-}
+
 
 
 #undef T
